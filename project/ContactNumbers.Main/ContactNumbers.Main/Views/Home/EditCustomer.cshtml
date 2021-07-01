@@ -1,0 +1,26 @@
+﻿@model ContactNumbers.Models.CustomerDetailsDTO
+
+@{
+    ViewBag.Title = "EditCustomer";
+    Layout = "~/Views/Shared/_Default.cshtml";
+}
+
+<h2>Edit Customer</h2>
+
+<p>
+    @Model.Customer.FirstName @Model.Customer.LastName
+</p>
+
+<h2>Save Contact Number</h2>
+<p>
+
+</p>
+
+<h2>Current Contact Numbers</h2>
+@foreach (var contactNumber in Model.ContactNumbers)
+{
+    <p>
+        @contactNumber.ContactNumber @contactNumber.ContactTypeName
+    </p>
+}
+

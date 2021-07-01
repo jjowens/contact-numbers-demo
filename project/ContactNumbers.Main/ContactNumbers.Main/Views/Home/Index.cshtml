@@ -1,0 +1,40 @@
+﻿@model List<ContactNumbers.Models.CustomerDTO>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Default.cshtml";
+}
+
+<div>
+    <h2>Customers</h2>
+</div>
+
+<div>
+    Add New Customer
+    @using(Html.BeginForm("NewCustomer", "Home", FormMethod.Post))
+    {
+        <div>First Name: @Html.TextBox("FirstName")</div>
+        <div>Last Name: @Html.TextBox("LastName")</div>
+        <div><input type="submit" value="Add" /></div>
+    }
+</div>
+
+<div>
+    @if (Model != null)
+    {
+        foreach (var item in Model)
+        {
+            <div>
+                <p>@item.FirstName @item.LastName</p>
+            </div>
+
+            <div>
+                <p>Edit</p>
+            </div>
+        }
+    } else
+    {
+        <p>No customers. Please add one</p>
+    }
+</div>
+
