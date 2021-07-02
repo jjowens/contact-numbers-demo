@@ -13,6 +13,8 @@ namespace ContactNumbers.Main
         {
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+
+
         }
     }
 }

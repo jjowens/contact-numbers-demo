@@ -5,36 +5,47 @@
     Layout = "~/Views/Shared/_Default.cshtml";
 }
 
-<div>
-    <h2>Customers</h2>
+<h3 class="header-text">Add New Customer</h3>
+<div class="flex">
+    <div class="pt-4 pb-4 flex-1">
+        @using (Html.BeginForm("NewCustomer", "Home", FormMethod.Post))
+        {
+            <div class="editor-field">First Name: @Html.TextBox("FirstName", "", new { @class="text-box" })</div>
+            <div class="editor-field">Last Name: @Html.TextBox("LastName", "", new { @class = "text-box" })</div>
+            <div class="editor-field"><input type="submit" value="Add" class="editor-button" /></div>
+        }
+    </div>
 </div>
 
-<div>
-    Add New Customer
-    @using(Html.BeginForm("NewCustomer", "Home", FormMethod.Post))
-    {
-        <div>First Name: @Html.TextBox("FirstName")</div>
-        <div>Last Name: @Html.TextBox("LastName")</div>
-        <div><input type="submit" value="Add" /></div>
-    }
-</div>
-
-<div>
+<h2 class="header-text">Customers</h2>
+<div class="customers-grid">
     @if (Model != null)
     {
         foreach (var item in Model)
         {
             <div>
-                <p>@item.FirstName @item.LastName</p>
-            </div>
+                <p>
+                    <span class="float-left">
+                        @item.FirstName @item.LastName
+                    </span>
 
-            <div>
-                <p>Edit</p>
+                    <span class="float-right">
+                        @Html.ActionLink("Edit", "EditCustomer", new { id = item.CustomerID })
+                        @Html.ActionLink("Delete", "DeleteCustomer",
+                        new { id = item.CustomerID },
+                        new { onclick = "return confirm('Are you sure you wish to delete this customer?');" })
+                    </span>
+                </p>
             </div>
         }
-    } else
+        if (Model.Count() == 0)
+        {
+            <p class="warning">No available customers. Please add one</p>
+        }
+    }
+    else
     {
-        <p>No customers. Please add one</p>
+        <p class="warning">No available customers. Please add one</p>
     }
 </div>
 

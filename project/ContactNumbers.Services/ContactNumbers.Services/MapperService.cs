@@ -17,8 +17,10 @@ namespace ContactNumbers.Services
             {
                 cfg.AllowNullCollections = true;
                 cfg.CreateMap<Customer, CustomerDTO>();
+                cfg.CreateMap<CustomerDTO, Customer>();
                 cfg.CreateMap<ContactType, ContactTypeDTO>();
                 cfg.CreateMap<ContactNumber, ContactNumberDTO>();
+                cfg.CreateMap<ContactNumberDTO, ContactNumber>();
                 cfg.CreateMap<Customer, CustomerDetailsDTO>()
                  .ForMember(a => a.Customer, b => b.MapFrom(cus => cus));
 

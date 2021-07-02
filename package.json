@@ -1,0 +1,21 @@
+{
+  "name": "contact-numbers-demo",
+  "version": "1.0.0",
+  "description": "Demo website to add contact numebrs for each customer",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+	"tailwind-dev": "npx tailwindcss-cli@latest build -i ./assets/tailwind.css -c ./assets/tailwind.config.js -o ./project/ContactNumbers.Main/ContactNumbers.Main/public/css/default.css",
+	"tailwind-prod": "npx tailwindcss-cli@latest build -i ./assets/tailwind.css -c ./assets/tailwind.config.js -o ./project/ContactNumbers.Main/ContactNumbers.Main/public/css/default.css --purge=true"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jjowens/contact-numbers-demo.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jjowens/contact-numbers-demo/issues"
+  },
+  "homepage": "https://github.com/jjowens/contact-numbers-demo#readme"
+}

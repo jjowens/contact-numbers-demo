@@ -10,5 +10,6 @@ namespace ContactNumbers.Models
     {
         public CustomerDTO Customer { get; set; }
         public IEnumerable<ContactNumberDTO> ContactNumbers { get; set; }
+        public IEnumerable<ContactTypeDTO> ContactTypes { get; set; }
     }
 }
