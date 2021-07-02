@@ -47,10 +47,15 @@ EntityFramework
 
 ### ContactNumbers.Main - Website Project
 EntityFramework
+
 Ninject
+
 Ninject.MVC5
+
 Ninject.Web.Common
+
 Ninject.Web.Common.Webhost
+
 WebActivatorEx
 
 ### ContactNumbers.Models - Models/classes for database/website
@@ -58,4 +63,5 @@ No packages required
 
 ### ContactNumbers.Services - Services Project
 Automapper
+
 EntityFramework
