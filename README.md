@@ -5,8 +5,11 @@ Demo website to add contact numbers for each customer
 With this website you can do the following.
 
 -- You can create new customers and delete them.
+
 -- You can create new contact number and delete them. There is a validation check in place to see if the contact number already exists. If it already exists, it will reject with no warning onscreen.
+
 -- You can also set different contact number types, Home, Work or Mobile
+
 -- If you are deleting a record, you will be asked to confirm
 
 Note: There are no validation checks in place to see if a customer already exists.
