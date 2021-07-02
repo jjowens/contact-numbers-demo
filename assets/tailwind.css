@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+ 
+ body {
+	 @apply font-sans;
+ }
+ 
+.editor-button {
+	@apply rounded bg-blue-300 pl-4 pr-4 pt-2 pb-2 cursor-pointer border-solid border-2 border-blue-400
+}
+
+.editor-field {
+	@apply float-left mr-3
+}
+
+.warning {
+	@apply rounded bg-red-300 pl-4 pr-4 pt-2 pb-2
+}
+
+.customers-grid {
+	@apply grid grid-cols-1 w-1/4 
+}
+
+.customers-grid div:nth-of-type(odd) {
+	@apply bg-blue-100 mb-2 p-2
+}
+
+.customers-grid div:nth-of-type(even) {
+	@apply bg-white mb-2 p-2
+}
+
+.contactnumbers-grid {
+	@apply grid grid-cols-1 w-1/4 
+}
+
+.contactnumbers-grid div:nth-of-type(odd) {
+	@apply bg-blue-100 mb-2 p-2
+}
+
+.contactnumbers-grid div:nth-of-type(even) {
+	@apply bg-white mb-2 p-2
+} 
+ 
+.text-box {
+	@apply border-solid border-2 border-gray-400
+}
+
+.banner {
+	@apply bg-gray-100 rounded pl-4 pr-4 pt-2 pb-2
+}
+
+.banner-header {
+	@apply font-medium text-4xl
+}
+
+.banner-header-text {
+	@apply font-medium text-4xl
+}
+
+.header-text {
+	@apply font-medium text-2xl
+}
+
+a:link {
+	color:blue;
+}
+
+a:visited {
+	color:blue;
+}
+
+a:hover{
+	color:blue;
+}
+a:active {
+	color:blue;
+}

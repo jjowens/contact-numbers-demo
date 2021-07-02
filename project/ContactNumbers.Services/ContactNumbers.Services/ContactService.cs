@@ -19,7 +19,7 @@ namespace ContactNumbers.Services
         private readonly IDatabaseService _databaseService;
         private readonly IMapperService _mapperService;
 
-        public ServiceResponse DeleteContactNumber(CustomerContactDTO contactDTO)
+        public ServiceResponse DeleteContactNumberByID(int id)
         {
             string logMessage = string.Empty;
             bool success = true;
@@ -29,7 +29,7 @@ namespace ContactNumbers.Services
             serviceResponse.Success = true;
             var dbContext = _databaseService.dbContext;
 
-            var record = dbContext.ContactNumbers.FirstOrDefault(con => con.ContactNumberID == contactDTO.ContactNumber.ContactNumberID);
+            var record = dbContext.ContactNumbers.FirstOrDefault(con => con.ContactNumberID == id);
 
             if (record != null)
             {
@@ -40,11 +40,13 @@ namespace ContactNumbers.Services
                     dbContext.SaveChanges();
                     logMessage = "Deleted Contact Number";
                     success = false;
-                } catch (Exception ex)
+                }
+                catch (Exception ex)
                 {
                     throw ex;
                 }
-            } else
+            }
+            else
             {
                 logMessage = "Not found";
                 success = false;
@@ -56,7 +58,7 @@ namespace ContactNumbers.Services
             return serviceResponse;
         }
 
-        public ServiceResponse DeleteContactType(ContactTypeDTO contactTypeDTO)
+        public ServiceResponse DeleteCustomerByID(int id)
         {
             string logMessage = string.Empty;
             bool success = true;
@@ -66,47 +68,8 @@ namespace ContactNumbers.Services
             serviceResponse.Success = true;
             var dbContext = _databaseService.dbContext;
 
-            var record = dbContext.ContactTypes.FirstOrDefault(con => con.ContactTypeID == contactTypeDTO.ContactTypeID);
-
-            if (record != null)
-            {
-                dbContext.ContactTypes.Remove(record);
-
-                try
-                {
-                    dbContext.SaveChanges();
-                    logMessage = "Deleted Contact Number Type";
-                    success = false;
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
-            }
-            else
-            {
-                logMessage = "Contact Type Not Found";
-                success = false;
-            }
-
-            serviceResponse.LogMessage = logMessage;
-            serviceResponse.Success = success;
-
-            return serviceResponse;
-        }
-
-        public ServiceResponse DeleteCustomer(CustomerDetailsDTO contact)
-        {
-            string logMessage = string.Empty;
-            bool success = true;
-
-            ServiceResponse serviceResponse = new ServiceResponse();
-
-            serviceResponse.Success = true;
-            var dbContext = _databaseService.dbContext;
-
-            var contactNumbers = dbContext.ContactNumbers.Where(con => con.CustomerID == contact.Customer.CustomerID).ToList();
-            var customer = dbContext.Customers.FirstOrDefault(cus => cus.CustomerID == contact.Customer.CustomerID);
+            var contactNumbers = dbContext.ContactNumbers.Where(con => con.CustomerID == id).ToList();
+            var customer = dbContext.Customers.FirstOrDefault(cus => cus.CustomerID == id);
 
             if (customer != null && contactNumbers != null)
             {
@@ -126,7 +89,7 @@ namespace ContactNumbers.Services
             }
             else
             {
-                logMessage = "Customer and/or customer's contact numbers not found";
+                logMessage = "Customer and/or contact numbers not found";
                 success = false;
             }
 
@@ -187,11 +150,14 @@ namespace ContactNumbers.Services
                                     CustomerID = customerID
                                   }).ToList();
 
+            var contactTypes = dbContext.ContactTypes.ToList();
+
             // RETURN RECORDS
             var results = new CustomerDetailsDTO
                             {
                                 Customer = _mapperService.mapper.Map<Customer, CustomerDTO>(customerObj),
-                                ContactNumbers = contactNumbers
+                                ContactNumbers = contactNumbers,
+                                ContactTypes = _mapperService.mapper.Map<List<ContactType>, List<ContactTypeDTO>>(contactTypes)
                             };
 
             serviceResponse.CustomerDetailDTO = results;
@@ -201,19 +167,133 @@ namespace ContactNumbers.Services
             return serviceResponse;
         }
 
-        public ServiceResponse SaveContactNumber(CustomerContactDTO contactDTO)
+        public ServiceResponse SaveContactNumber(ContactNumberDTO customerDTO)
         {
-            throw new NotImplementedException();
+            ServiceResponse serviceResponse = new ServiceResponse();
+            string logMessage = string.Empty;
+            bool success = true;
+
+            // CHECK CONTACT NUMBER.
+            if (string.IsNullOrEmpty(customerDTO.ContactNumber))
+            {
+                success = false;
+                logMessage = "No Contact Number not provided";
+                return serviceResponse;
+            }
+
+            serviceResponse.Success = true;
+            var dbContext = _databaseService.dbContext;
+
+            // CHECK IF CONTACT NUMBER ALREADY EXISTS
+            if (customerDTO.ContactNumberID == 0)
+            {
+                var existObj = dbContext.ContactNumbers.FirstOrDefault(con => con.ContactNumber1 == customerDTO.ContactNumber && con.CustomerID == customerDTO.CustomerID);
+
+                if (existObj != null)
+                {
+                    success = false;
+                    logMessage = "Contact number already exists";
+                }
+                else
+                {
+                    var newContactNumber = new ContactNumber()
+                    {
+                        ContactNumber1 = customerDTO.ContactNumber,
+                        ContactNumberID = 0,
+                        CustomerID = customerDTO.CustomerID,
+                        ContactNumberTypeID = (customerDTO.ContactNumberTypeID == 0) ? 1 : customerDTO.ContactNumberTypeID
+                    };
+
+                    dbContext.ContactNumbers.Add(newContactNumber);
+
+                    dbContext.SaveChanges();
+
+                    success = true;
+                    logMessage = "Added new Contact Number";
+                }
+            }
+            else
+            {
+                var currentObj = dbContext.ContactNumbers.FirstOrDefault(con => con.ContactNumberID == customerDTO.ContactNumberID);
+
+                if (currentObj == null)
+                {
+                    success = false;
+                    logMessage = "Contact number does not exists";
+                }
+                else
+                {
+                    currentObj.ContactNumber1 = customerDTO.ContactNumber;
+                    currentObj.ContactNumberTypeID = customerDTO.ContactNumberTypeID;
+
+                    dbContext.SaveChanges();
+
+                    success = true;
+                    logMessage = "Updated contact number";
+                }
+            }
+
+            serviceResponse.Success = success;
+
+            return serviceResponse;
         }
 
-        public ServiceResponse SaveContactType(ContactTypeDTO contactType)
+        public ServiceResponse SaveCustomer(CustomerDTO customerDTO)
         {
-            throw new NotImplementedException();
-        }
+            string logMessage = string.Empty;
+            bool success = true;
 
-        public ServiceResponse SaveCustomer(CustomerDetailsDTO contact)
-        {
-            throw new NotImplementedException();
+            ServiceResponse serviceResponse = new ServiceResponse();
+
+            serviceResponse.Success = true;
+            var dbContext = _databaseService.dbContext;
+
+            // CHECK IF CUSTOMER ALREADY EXISTS
+            if (customerDTO.CustomerID == 0)
+            {
+                var existObj = dbContext.Customers.FirstOrDefault(cus => cus.FirstName == customerDTO.FirstName && cus.LastName == customerDTO.LastName);
+
+                if (existObj != null)
+                {
+                    success = false;
+                    logMessage = "Customer already exists";
+                }
+                else
+                {
+                    var newObj = _mapperService.mapper.Map<CustomerDTO, Customer>(customerDTO);
+
+                    dbContext.Customers.Add(newObj);
+
+                    dbContext.SaveChanges();
+
+                    success = true;
+                    logMessage = "Added new Customer";
+                }
+            } else
+            {
+                var currentObj = dbContext.Customers.FirstOrDefault(cus => cus.CustomerID == customerDTO.CustomerID);
+
+                if (currentObj == null)
+                {
+                    success = false;
+                    logMessage = "Customer does not exists";
+                }
+                else
+                {
+                    currentObj.FirstName = customerDTO.FirstName;
+                    currentObj.LastName = customerDTO.LastName;
+
+                    dbContext.SaveChanges();
+
+                    success = true;
+                    logMessage = "Updated new Customer";
+                }
+            }
+
+            serviceResponse.Success = success;
+            serviceResponse.LogMessage = logMessage;
+
+            return serviceResponse;
         }
     }
 }

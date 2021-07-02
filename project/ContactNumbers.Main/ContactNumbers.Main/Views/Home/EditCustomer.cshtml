@@ -5,22 +5,76 @@
     Layout = "~/Views/Shared/_Default.cshtml";
 }
 
-<h2>Edit Customer</h2>
+<h3 class="header-text">Save Customer's Name</h3>
+<div class="flex">
+    @using (Html.BeginForm("SaveCustomer", "Home", FormMethod.Post))
+    {
+    <div class="flex-1">
+        <div class="editor-field">First Name: @Html.TextBox("FirstName", Model.Customer.FirstName, new { @class = "text-box" })</div>
+        <div class="editor-field">Last Name: @Html.TextBox("LastName", Model.Customer.LastName, new { @class = "text-box" })</div>
+        @Html.Hidden("CustomerID", Model.Customer.CustomerID)
+        <div class="editor-field"><input type="submit" value="Save" class="editor-button" /></div>
+    </div>
+    }
+</div>
 
-<p>
-    @Model.Customer.FirstName @Model.Customer.LastName
-</p>
+<h2 class="header-text">Save Contact Number</h2>
+<div class="flex">
+    @using (Html.BeginForm("SaveContactNumber", "Home", FormMethod.Post, new { @name="SaveContactNumberForm", @id="SaveContactNumberForm" }))
+    {
+        <div class="editor-field">Contact Number: @Html.TextBox("ContactNumber", 
+                                                 "", 
+                                                 new { @class = "text-box", @name="ContactNumber", @id="ContactNumber" })</div>
+        <div class="editor-field">
+            Contact Type: @Html.DropDownList("ContactNumberTypeID", 
+                         new SelectList(Model.ContactTypes, "ContactTypeID", "ContactTypeName"), 
+                         null, 
+                         new { @class = "border-solid border-2 border-gray-400", @name = "ContactTypeID", @id = "ContactTypeID" })
+        </div>
+        @Html.Hidden("CustomerID", Model.Customer.CustomerID);
+        @Html.Hidden("ContactNumberID", 0);
+        <div class="editor-field">
+            <input type="submit" value="Save" class="editor-button"/>
+            <input type="button" value="Clear" class="editor-button" onclick="clearContactForm()" />
+        </div>
+    }
+</div>
 
-<h2>Save Contact Number</h2>
-<p>
+<h2 class="header-text">Current Contact Numbers</h2>
+<div class="contactnumbers-grid">
+    @foreach (var contactNumber in Model.ContactNumbers)
+    {
+        <div>
+            <p>
+                <span class="mr-4">@contactNumber.ContactNumber</span> 
+                <span class="float-right">
+                   <a href="#" onclick="editContact(this)" 
+                      data-contactnumberid="@contactNumber.ContactNumberID"
+                      data-contactnumber="@contactNumber.ContactNumber"
+                      data-contacttypeid="@contactNumber.ContactNumberTypeID"
+                      >Edit</a>
+                    @Html.ActionLink("Delete", "DeleteContactNumber", 
+                                    new { contactNumberID = contactNumber.ContactNumberID, customerID = contactNumber.CustomerID },
+                                    new { onclick = "return confirm('Are you sure you wish to delete this contact number?');" })
+                </span>
+                <span class="float-right mr-4">@contactNumber.ContactTypeName</span>
+            </p>
+        </div>
+    }
+</div>
 
-</p>
+<script>
+    function editContact(d) {
+        document.getElementById("ContactNumberID").value = d.getAttribute("data-contactnumberid");
+        document.getElementById("ContactNumber").value = d.getAttribute("data-contactnumber");
+        document.getElementById("ContactTypeID").value = d.getAttribute("data-contacttypeid");
+    }
 
-<h2>Current Contact Numbers</h2>
-@foreach (var contactNumber in Model.ContactNumbers)
-{
-    <p>
-        @contactNumber.ContactNumber @contactNumber.ContactTypeName
-    </p>
-}
+    function clearContactForm() {
+        document.getElementById("ContactNumberID").value = 0;
+        document.getElementById("ContactNumber").value = "";
+        document.getElementById("ContactTypeID").value = 1;
+    }
+
+ </script>
 

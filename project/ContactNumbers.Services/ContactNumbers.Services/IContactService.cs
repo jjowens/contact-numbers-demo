@@ -11,11 +11,9 @@ namespace ContactNumbers.Services
     {
         ServiceResponse GetAllCustomers();
         ServiceResponse GetCustomer(int customerID);
-        ServiceResponse SaveCustomer(CustomerDetailsDTO contact);
-        ServiceResponse SaveContactNumber(CustomerContactDTO contactDTO);
-        ServiceResponse DeleteCustomer(CustomerDetailsDTO contact);
-        ServiceResponse DeleteContactNumber(CustomerContactDTO contactDTO);
-        ServiceResponse SaveContactType(ContactTypeDTO contactType);
-        ServiceResponse DeleteContactType(ContactTypeDTO contactType);
+        ServiceResponse SaveContactNumber(ContactNumberDTO customerDTO);
+        ServiceResponse DeleteCustomerByID(int id);
+        ServiceResponse DeleteContactNumberByID(int id);
+        ServiceResponse SaveCustomer(CustomerDTO customerDTO);
     }
 }

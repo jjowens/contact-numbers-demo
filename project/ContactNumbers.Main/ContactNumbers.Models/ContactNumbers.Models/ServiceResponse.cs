@@ -16,5 +16,6 @@ namespace ContactNumbers.Models
         public List<ContactNumberDTO> ContactNumbers { get; set; }
         public List<CustomerDTO> CustomersDTO { get; set; }
         public CustomerDetailsDTO CustomerDetailDTO { get; set; }
+
     }
 }
