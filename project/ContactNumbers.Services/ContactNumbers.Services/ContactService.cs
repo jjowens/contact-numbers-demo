@@ -245,6 +245,14 @@ namespace ContactNumbers.Services
 
             ServiceResponse serviceResponse = new ServiceResponse();
 
+            // CHECK CUSTOMER
+            if (string.IsNullOrEmpty(customerDTO.FirstName) || string.IsNullOrEmpty(customerDTO.LastName))
+            {
+                success = false;
+                logMessage = "Fullname was not provided";
+                return serviceResponse;
+            }
+
             serviceResponse.Success = true;
             var dbContext = _databaseService.dbContext;
 
